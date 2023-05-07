@@ -6,6 +6,8 @@ import ru.otus.abstractFabric.sorting.Sort;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 public class IOC {
 
     private static final Map<String, Sort> sortings = new HashMap<>();
@@ -16,7 +18,11 @@ public class IOC {
     }
 
     public static Sort getFromSortingsIoc(String sortingName) {
-        return sortings.get(sortingName);
+        Sort sort = sortings.get(sortingName);
+        if (isNull(sort)) {
+            throw new RuntimeException(sortingName + " обработчика для такой сортировки не найдено");
+        }
+        return sort;
     }
 
     public static void addToFabricsIoc(String sortName, AbstractFactory factory) {
@@ -24,6 +30,10 @@ public class IOC {
     }
 
     public static AbstractFactory getFromFabricsIoc(String sortName) {
-        return fabrics.get(sortName);
+        AbstractFactory abstractFactory = fabrics.get(sortName);
+        if (isNull(abstractFactory)) {
+            throw new RuntimeException(sortName + " обработчика для такой сортировки не найдено");
+        }
+        return abstractFactory;
     }
 }
